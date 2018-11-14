@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PictureGalleryBlobStorageNetCore.BlobStorage;
-using PictureGalleryBlobStorageNetCore.Models;
 using PictureGalleryBlobStorageNetCore.ViewModels;
+using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace PictureGalleryBlobStorageNetCore.Controllers
 {
   public class PictureController : Controller
   {
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-      return View(model: new List<Picture>());
+      return View(model: await new BlobStorageManager().GetPicturesAsync());
     }
     // Action pour voir la page du formulaire
     public IActionResult Upload()
@@ -29,11 +25,23 @@ namespace PictureGalleryBlobStorageNetCore.Controllers
     // Action d'envoi d'image
     [ValidateAntiForgeryToken]
     [HttpPost]
-    public IActionResult Upload(PictureUploadViewModel pictureViewModel)
+    public async Task<IActionResult> Upload(PictureUploadViewModel pictureViewModel)
     {
       if (!ModelState.IsValid)
         return View();
-      // TODO : utiliser BlobStorageManager pour sauvegarder la liste des images
+      string msg = null;
+      // TODO : utiliser BlobStorageManager pour sauvegarder l'images
+      try
+      {
+        await new BlobStorageManager().SavePictureAsync(pictureViewModel);
+        msg = "Picture saved";
+      }
+      catch (Exception ex)
+      {
+        Debug.WriteLine(ex.Message);
+        msg = "Error saving picture";
+      }
+      Debug.WriteLine(msg);
       return RedirectToAction(nameof(Index));
     }
   }
