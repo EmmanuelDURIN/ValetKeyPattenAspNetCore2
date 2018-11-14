@@ -1,0 +1,26 @@
+﻿@model IEnumerable<PictureGalleryBlobStorageNetCore.Models.Picture>
+
+@{
+    ViewBag.Title = "Picture Gallery";
+}
+
+<h2>Picture Gallery</h2>
+
+<p>
+    @Html.ActionLink("Upload picture", "Upload")
+</p>
+
+
+@foreach (var item in Model) {
+    <div class="col-md-2">
+        <div>
+            <img src="@item.ImageUrl" style="width:100px;height:100px" />
+        </div>
+        <div>
+            @Html.DisplayFor(modelItem => item.Title)
+        </div>
+        <div>
+            @Html.DisplayFor(modelItem => item.Date)
+        </div>
+    </div>
+}
