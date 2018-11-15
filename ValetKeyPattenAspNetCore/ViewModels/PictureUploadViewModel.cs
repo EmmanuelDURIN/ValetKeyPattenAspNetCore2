@@ -15,5 +15,7 @@ namespace PictureGalleryBlobStorageNetCore.ViewModels
     [DataType(DataType.Date)]
     public DateTime Date { get; set; }
     public IFormFile Image { set; get; }
+    public string StorageAccount { get; internal set; }
+    public string ContainerName { get; internal set; }
   }
 }

@@ -19,6 +19,8 @@ namespace PictureGalleryBlobStorageNetCore.Controllers
       PictureUploadViewModel p = new PictureUploadViewModel
       {
         Date = DateTime.Now,
+        StorageAccount = BlobStorageManager.StorageAccount,
+        ContainerName = BlobStorageManager.ContainerName
       };
       return View(model: p);
     }
@@ -43,6 +45,12 @@ namespace PictureGalleryBlobStorageNetCore.Controllers
       }
       Debug.WriteLine(msg);
       return RedirectToAction(nameof(Index));
+    }
+    public async Task<IActionResult> GetSasToken(string filename)
+    {
+      //string filename = this.Request["filename"];
+      String token = await new BlobStorageManager().GetSASTokenForCreation(filename);
+      return new JsonResult(token);
     }
   }
 }
