@@ -77,8 +77,6 @@
                         } else {
                             console.log('Upload is successful');
                             $("#message").addClass("alert-success").html("File " + filename + " uploaded");
-                            var picture = $("#uploadForm").serialize();
-                            $.post("/picture/createpicture", picture, function () { console.log("posted"); })
                             setTimeout(function () { location.assign("/picture/index"); }, 500);
                         }
                     });
